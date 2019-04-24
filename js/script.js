@@ -18,6 +18,9 @@ var kamienBtn = document.getElementById('kamien');
 var nozyceBtn = document.getElementById('nozyce');
 var newGameBtn = document.getElementById('newGameBtn');
 
+var playerMoveButtons = document.querySelectorAll('.player-move');
+console.log('playerMoveButtons' ,playerMoveButtons);
+
 //Strings
 var rock = 'kamien';
 var scissors = 'nozyce';
@@ -88,13 +91,13 @@ var newGameStart = function() {
     allRounds = window.prompt('Do ilu wygranych rund chcesz grać?');
     if (!isNaN(allRounds) && allRounds.length > 0) {
         gameContinue = true;
-        output.innerHTML = 'Let\'s play'
-        result.innerHTML = ''
-        playerScore = 0
-        computerScore = 0
+        output.innerHTML = 'Let\'s play';
+        result.innerHTML = '';
+        playerScore = 0;
+        computerScore = 0;
         return allRounds
     } else {
-        gameContinue = false
+        gameContinue = false;
         alert('You have to type number value')
     }
 };
@@ -129,3 +132,7 @@ papierBtn.addEventListener('click', onButtonClick);
 kamienBtn.addEventListener('click', onButtonClick);
 nozyceBtn.addEventListener('click', onButtonClick);
 newGameBtn.addEventListener('click', newGameStart);
+
+playerMoveButtons.forEach(function(element){
+    element.playerMove(element.getAttribute('data-move'));
+});
