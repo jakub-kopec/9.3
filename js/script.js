@@ -12,19 +12,15 @@ var computerScore = 0;
 var allRounds = 0;
 var gameContinue = false;
 
-//Btn's
-var papierBtn = document.getElementById('papier');
-var kamienBtn = document.getElementById('kamien');
-var nozyceBtn = document.getElementById('nozyce');
 var newGameBtn = document.getElementById('newGameBtn');
 
 var playerMoveButtons = document.querySelectorAll('.player-move');
-console.log('playerMoveButtons' ,playerMoveButtons);
+
 
 //Strings
-var rock = 'kamien';
-var scissors = 'nozyce';
-var paper = 'papier';
+var rock = 'rock';
+var scissors = 'scissors';
+var paper = 'paper';
 
 var computerWin = 'computerWin';
 var playerWin = 'playerWin';
@@ -32,7 +28,8 @@ var draw = 'draw';
 
 //Functions
 var getPlayerM = function(event) {
-    return event.target.id;
+    console.log(event.target.getAttribute('data-move'))
+    return event.target.getAttribute('data-move');
 };
 
 var getComputerM = function() {
@@ -47,6 +44,8 @@ var getComputerM = function() {
 };
 
 var printRoundOutput = function(score, playerM, computerM) {
+    console.log('playerM', playerM)
+    console.log('computerM', computerM)
     if (score === playerWin) {
         output.innerHTML += 'YOU WON: you played ' + playerM + ', computer played ' + computerM + '<br><br>'
     } else if (score === computerWin) {
@@ -128,11 +127,11 @@ var onButtonClick = function(event) {
     }
 };
 
-papierBtn.addEventListener('click', onButtonClick);
-kamienBtn.addEventListener('click', onButtonClick);
-nozyceBtn.addEventListener('click', onButtonClick);
+// papierBtn.addEventListener('click', onButtonClick);
+// kamienBtn.addEventListener('click', onButtonClick);
+// nozyceBtn.addEventListener('click', onButtonClick);
 newGameBtn.addEventListener('click', newGameStart);
 
 playerMoveButtons.forEach(function(element){
-    element.playerMove(element.getAttribute('data-move'));
+    element.addEventListener('click', onButtonClick)
 });
