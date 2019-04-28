@@ -5,15 +5,20 @@ var roundsLeft = document.getElementById('roundsLeft');
 var gameEnd = document.getElementById('gameEnd');
 
 
+var params = {
+    allRounds: 0,
+    playerScore: 0,
+    computerScore: 0
+}
+
 //Wynik
 var score;
-var playerScore = 0;
-var computerScore = 0;
-var allRounds = 0;
+// var playerScore = 0;
+// var computerScore = 0;
+// var allRounds = 0;
 var gameContinue = false;
 
 var newGameBtn = document.getElementById('newGameBtn');
-
 var playerMoveButtons = document.querySelectorAll('.player-move');
 
 
@@ -58,14 +63,14 @@ var printRoundOutput = function(score, playerM, computerM) {
 
 var updateScore = function(score) {
     if (score === playerWin) {
-        playerScore += 1;
+        params.playerScore += 1;
     } else if (score === computerWin) {
-        computerScore += 1;
+        params.computerScore += 1;
     }
 };
 
-var printScore = function(playerScore, computerScore) {
-    result.innerHTML = 'playerScore ' + playerScore + ' - ' + computerScore + ' computerScore';
+var printScore = function(params) {
+    result.innerHTML = 'playerScore ' + params.playerScore + ' - ' + params.computerScore + ' computerScore';
 };
 
 var playerMove = function(event) {
@@ -80,36 +85,36 @@ var playerMove = function(event) {
     }
     printRoundOutput(score, playerM, computerM);
     updateScore(score);
-    printScore(playerScore, computerScore);
-    printRoundsToWin(allRounds);
-    printGameContinue(playerScore, computerScore, allRounds);
+    printScore(params);
+    printRoundsToWin(params);
+    printGameContinue(params);
 };
 
 /*Start nowej gry*/
 var newGameStart = function() {
-    allRounds = window.prompt('Do ilu wygranych rund chcesz grać?');
-    if (!isNaN(allRounds) && allRounds.length > 0) {
+    params.allRounds = window.prompt('Do ilu wygranych rund chcesz grać?');
+    if (!isNaN(params.allRounds) && params.allRounds.length > 0) {
         gameContinue = true;
         output.innerHTML = 'Let\'s play';
         result.innerHTML = '';
-        playerScore = 0;
-        computerScore = 0;
-        return allRounds
+        params.playerScore = 0;
+        params.computerScore = 0;
+        return params.allRounds
     } else {
         gameContinue = false;
         alert('You have to type number value')
     }
 };
 
-var printRoundsToWin = function(allRounds) {
-    roundsLeft.innerHTML = 'Wygrywa gracz, który zdobędzie ' + allRounds + ' rund' + '<br><br>';
+var printRoundsToWin = function(params) {
+    roundsLeft.innerHTML = 'Wygrywa gracz, który zdobędzie ' + params.allRounds + ' rund' + '<br><br>';
 };
 
-var printGameContinue = function(playerScore, computerScore, allRounds) {
-    if (playerScore.toString() === allRounds) {
+var printGameContinue = function(params) {
+    if (params.playerScore.toString() === params.allRounds) {
         gameEnd.innerHTML = 'YOU WON THE ENTIRE GAME!!!' + '<br><br>';
         gameContinue = false;
-    } else if (computerScore.toString() === allRounds) {
+    } else if (params.computerScore.toString() === params.allRounds) {
         gameEnd.innerHTML = 'COMPUTER WON THE ENTIRE GAME!!!' + '<br><br>';
         gameContinue = false;
     }
@@ -127,11 +132,7 @@ var onButtonClick = function(event) {
     }
 };
 
-// papierBtn.addEventListener('click', onButtonClick);
-// kamienBtn.addEventListener('click', onButtonClick);
-// nozyceBtn.addEventListener('click', onButtonClick);
 newGameBtn.addEventListener('click', newGameStart);
-
 playerMoveButtons.forEach(function(element){
     element.addEventListener('click', onButtonClick)
 });
