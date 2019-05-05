@@ -6,10 +6,12 @@ var gameEnd = document.getElementById('gameEnd');
 
 
 var params = {
+    currentRound: 0,
     allRounds: 0,
     playerScore: 0,
     computerScore: 0,
-    gameContinue: false
+    gameContinue: false,
+    progress: []
 }
 
 //Wynik
@@ -69,6 +71,7 @@ var printScore = function(params) {
 };
 
 var playerMove = function(event) {
+    params.currentRound ++;
     var playerM = getPlayerM(event);
     var computerM = getComputerM();
     if (computerM ===  playerM) {
@@ -80,6 +83,14 @@ var playerMove = function(event) {
     }
     printRoundOutput(score, playerM, computerM);
     updateScore(score);
+    params.progress.push({
+        currentRound: params.currentRound,
+        playerMove: playerM,
+        computerMove: computerM,
+        roundScore: score,
+        scoreAfterRound: params.playerScore + ' - ' + params.computerScore,
+    })
+    updateModal();
     printScore(params);
     printRoundsToWin(params);
     printGameContinue(params);
@@ -87,6 +98,7 @@ var playerMove = function(event) {
 
 /*Start nowej gry*/
 var newGameStart = function() {
+    params.currentRound = 0;
     params.allRounds = window.prompt('Do ilu wygranych rund chcesz grać?');
     if (!isNaN(params.allRounds) && params.allRounds.length > 0) {
         params.gameContinue = true;
@@ -166,10 +178,22 @@ for(var i = 0; i < modals.length; i++){
     });
 }
 
-//do wyrzucenia
+//Table row insert
+var progressIndex = 0;
 
-var modalLinks = document.querySelectorAll('.show-modal');
+function updateModal() {
 
-modalLinks.forEach(function(element) {
-    element.addEventListener('click', showModal);
-})
+    var table = document.getElementById("myTable");
+    var row = table.insertRow(-1);
+    var tableCurrentRound = row.insertCell(0);
+    var tablePlayerMove = row.insertCell(-1);
+    var tableComputerMove = row.insertCell(-1);
+    var tableRoundScore = row.insertCell(-1);
+    var tableScoreAfterRound = row.insertCell(-1);
+    tableCurrentRound.innerHTML = params.progress[progressIndex].currentRound;
+    tableComputerMove.innerHTML = params.progress[progressIndex].playerMove;
+    tablePlayerMove.innerHTML = params.progress[progressIndex].computerMove;
+    tableRoundScore.innerHTML = params.progress[progressIndex].roundScore;
+    tableScoreAfterRound.innerHTML = params.progress[progressIndex].scoreAfterRound;
+    progressIndex += 1
+}
