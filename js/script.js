@@ -8,15 +8,13 @@ var gameEnd = document.getElementById('gameEnd');
 var params = {
     allRounds: 0,
     playerScore: 0,
-    computerScore: 0
+    computerScore: 0,
+    gameContinue: false
 }
 
 //Wynik
 var score;
-// var playerScore = 0;
-// var computerScore = 0;
-// var allRounds = 0;
-var gameContinue = false;
+// var gameContinue = false;
 
 var newGameBtn = document.getElementById('newGameBtn');
 var playerMoveButtons = document.querySelectorAll('.player-move');
@@ -33,7 +31,6 @@ var draw = 'draw';
 
 //Functions
 var getPlayerM = function(event) {
-    console.log(event.target.getAttribute('data-move'))
     return event.target.getAttribute('data-move');
 };
 
@@ -49,8 +46,6 @@ var getComputerM = function() {
 };
 
 var printRoundOutput = function(score, playerM, computerM) {
-    console.log('playerM', playerM)
-    console.log('computerM', computerM)
     if (score === playerWin) {
         output.innerHTML += 'YOU WON: you played ' + playerM + ', computer played ' + computerM + '<br><br>'
     } else if (score === computerWin) {
@@ -94,14 +89,14 @@ var playerMove = function(event) {
 var newGameStart = function() {
     params.allRounds = window.prompt('Do ilu wygranych rund chcesz grać?');
     if (!isNaN(params.allRounds) && params.allRounds.length > 0) {
-        gameContinue = true;
+        params.gameContinue = true;
         output.innerHTML = 'Let\'s play';
         result.innerHTML = '';
         params.playerScore = 0;
         params.computerScore = 0;
         return params.allRounds
     } else {
-        gameContinue = false;
+        params.gameContinue = false;
         alert('You have to type number value')
     }
 };
@@ -113,10 +108,12 @@ var printRoundsToWin = function(params) {
 var printGameContinue = function(params) {
     if (params.playerScore.toString() === params.allRounds) {
         gameEnd.innerHTML = 'YOU WON THE ENTIRE GAME!!!' + '<br><br>';
-        gameContinue = false;
+        params.gameContinue = false;
+        showModal()
     } else if (params.computerScore.toString() === params.allRounds) {
         gameEnd.innerHTML = 'COMPUTER WON THE ENTIRE GAME!!!' + '<br><br>';
-        gameContinue = false;
+        params.gameContinue = false;
+        showModal()
     }
 };
 
@@ -125,7 +122,7 @@ var pressNewGame = function() {
 };
 
 var onButtonClick = function(event) {
-    if (gameContinue) {
+    if (params.gameContinue) {
         return playerMove(event)
     } else {
         return pressNewGame()
@@ -136,3 +133,43 @@ newGameBtn.addEventListener('click', newGameStart);
 playerMoveButtons.forEach(function(element){
     element.addEventListener('click', onButtonClick)
 });
+
+//Modals
+
+var modals = document.querySelectorAll('.modal');
+var resultModal = document.querySelector('#result-modal')
+
+
+var showModal = function(){
+    resultModal.classList.add('show')
+    document.querySelector('#modal-overlay').classList.add('show')
+};
+
+
+
+var hideModal = function(event){
+    event.preventDefault();
+    document.querySelector('#modal-overlay').classList.remove('show');
+};
+
+var closeButtons = document.querySelectorAll('.modal .close');
+
+closeButtons.forEach(function(element) {
+    element.addEventListener('click', hideModal);
+})
+
+document.querySelector('#modal-overlay').addEventListener('click', hideModal);
+
+for(var i = 0; i < modals.length; i++){
+    modals[i].addEventListener('click', function(event){
+        event.stopPropagation();
+    });
+}
+
+//do wyrzucenia
+
+var modalLinks = document.querySelectorAll('.show-modal');
+
+modalLinks.forEach(function(element) {
+    element.addEventListener('click', showModal);
+})
